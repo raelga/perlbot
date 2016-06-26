@@ -4,6 +4,14 @@ use strict;
 use warnings;
 use Data::Dumper;
 use WWW::Telegram::BotAPI;
+use Log::Log4perl qw(get_logger);
+
+# Log4perl initialization
+my $log_conf = "conf/log4perl.conf";
+Log::Log4perl->init($log_conf);
+
+# Obtain a logger instance
+my $logger = get_logger();
 
 # Get the Bot API
 my $api = WWW::Telegram::BotAPI->new (
@@ -13,7 +21,7 @@ my $api = WWW::Telegram::BotAPI->new (
 # Get the Bot
 my $me = $api->getMe or die;
 
-printf "Starting %s...\n", $me->{result}{username};
+$logger->info("Starting ", $me->{result}{username}, ".");
 
 # Initialization
 my ($offset, $updates) = 0;
@@ -37,8 +45,8 @@ while (1) {
   for my $u (@{$updates->{result}}) {
 
     # Dump JSON update content
-    print Dumper($u);
-
+    $logger->debug("Update: ", Dumper($u));
+ 
     # Increment offset
     $offset = $u->{update_id} + 1 if $u->{update_id} >= $offset;
   }
