@@ -11,6 +11,7 @@ perl cpanm --installdeps .
 ### Run
 
 ```
+export TELEGRAM_TOKEN="*********"
 perl perlbot.pl
 ```
 
